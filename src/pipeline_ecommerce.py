@@ -87,18 +87,10 @@ def transformar_dados_vendas(df: pd.DataFrame) -> pd.DataFrame:
 
         df_copia["faturamento"] = df_copia["quantidade"] * df_copia["preco_unitario"]
 
-        df_agrupado = (
-            df_copia.groupby("categoria", as_index=False)[["quantidade", "faturamento"]]
-            .sum()
-            .reset_index()
-        )
-
-        df_relatorio = df_agrupado.sort_values(
-            by="faturamento", ascending=False
-        ).reset_index(drop=True)
+        df_copia["data_venda"] = pd.to_datetime(df_copia["data_venda"])
 
         logging.info("Transformação realizada com sucesso!")
-        return df_relatorio
+        return df_copia
 
     except Exception as e:
         logging.error(f"Erro na transformação dos dados: {e}")
